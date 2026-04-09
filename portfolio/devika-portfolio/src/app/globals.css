@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #030014;
+  --color-foreground: #ededed;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  cursor: none;
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.4);
+  color: #fff;
+}
+
+/* ───── Sparkle Cursor ───── */
+.cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px 3px rgba(200,150,255,0.9), 0 0 20px 6px rgba(168,85,247,0.6);
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s, height 0.15s, background 0.15s;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(168,85,247,0.5);
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, border-color 0.25s, opacity 0.25s;
+  backdrop-filter: blur(1px);
+}
+
+.cursor-sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99997;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: sparkle-pop 0.65s ease-out forwards;
+}
+
+@keyframes sparkle-pop {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0); }
+}
+
+/* ───── Star trail ───── */
+.cursor-star {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99996;
+  animation: star-fade 0.8s ease-out forwards;
+}
+
+@keyframes star-fade {
+  0%   { opacity: 0.9; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(45deg) scale(0.1); }
+}
+
+/* ───── Floating Orb Background ───── */
+@keyframes orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.18; }
+  33%       { transform: translate(30px, -20px) scale(1.1); opacity: 0.28; }
+  66%       { transform: translate(-20px, 15px) scale(0.95); opacity: 0.2; }
+}
+
+.orb {
+  animation: orb-drift var(--dur, 18s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ───── Shimmer border ───── */
+@keyframes border-shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.shimmer-card {
+  position: relative;
+}
+
+.shimmer-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #7c3aed, #db2777, #2563eb, #7c3aed);
+  background-size: 300% 300%;
+  animation: border-shimmer 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: -1;
+}
+
+.shimmer-card:hover::before {
+  opacity: 0.6;
+}
+
+/* ───── Glowing text ───── */
+.glow-text {
+  text-shadow: 0 0 40px rgba(168,85,247,0.5), 0 0 80px rgba(168,85,247,0.2);
+}
+
+/* ───── Section reveal ───── */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ───── Scrollbar ───── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #030014; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #7c3aed, #db2777);
+  border-radius: 10px;
+}
+
+/* ───── Typed cursor blink ───── */
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.typed-cursor { animation: blink 1s step-end infinite; }
+
+/* ───── Nav pill ───── */
+.nav-pill {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  border-radius: 9999px;
+}
+
+/* ───── Gradient text ───── */
+.gradient-text {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #6366f1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ───── Floating animation ───── */
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.float-anim { animation: float 4s ease-in-out infinite; }
+
+/* ───── Pulse ring ───── */
+@keyframes pulse-ring {
+  0%   { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(168,85,247,0.5); }
+  70%  { transform: scale(1);   opacity: 0;   box-shadow: 0 0 0 20px rgba(168,85,247,0); }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  animation: pulse-ring 2.5s ease-out infinite;
+}
+
+/* ───── Skill badge hover ───── */
+.skill-badge {
+  transition: all 0.25s ease;
+}
+.skill-badge:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 20px rgba(168,85,247,0.3);
+}
+
+/* ───── Noise texture overlay ───── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+}
