@@ -96,12 +96,12 @@ Developed **Nexo** — a DeepFace live facial recognition system for missing-per
 <td align="center" width="33%">
 
 # 🥉
-### HackEuropa
+### HackEuropa — SOE CUSAT
 **3rd Prize**
 
-Built an **Inclusive Learning Platform** for accessibility 
+Built an **Inclusive Learning Platform** for accessibility
 
-![Badge](https://img.shields.io/badge/3rd%20Prize-European%20Stage-3b82f6?style=for-the-badge)
+![Badge](https://img.shields.io/badge/3rd%20Prize-SOE%20CUSAT-3b82f6?style=for-the-badge)
 
 </td>
 <td align="center" width="33%">
@@ -184,7 +184,7 @@ Selected from **99+ teams** for TraffiQ — an AI-powered adaptive traffic optim
 <td width="50%" valign="top">
 
 ### 🔵 Inclusive Learning Assistant
-*🥉 HackEuropa 3rd Prize · Accessibility Platform*
+*🥉 HackEuropa (SOE CUSAT) 3rd Prize · Accessibility Platform*
 
 ▹ AI Reading Coach & Text-to-Figure explainer via **Gemini**  
 ▹ Smart Voice Notes & Focus Line reading with **Web Speech API**  
