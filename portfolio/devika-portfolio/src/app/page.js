@@ -372,10 +372,11 @@ const StatBadge = ({ value, label, delay }) => (
 );
 
 // ───────────────────────────────────────────
-// Contact Form (EmailJS)
+// Contact Form (EmailJS) — toggle on Say Hello
 // ───────────────────────────────────────────
 function ContactForm() {
   const formRef = useRef(null);
+  const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
@@ -393,57 +394,104 @@ function ContactForm() {
       );
       setStatus("sent");
       setForm({ name: "", email: "", message: "" });
+      setTimeout(() => { setOpen(false); setStatus("idle"); }, 3000);
     } catch (err) {
       console.error(err);
       setStatus("error");
     }
   };
 
+  const fields = [
+    { name: "name",    type: "text",  placeholder: "Your Name" },
+    { name: "email",   type: "email", placeholder: "Your Email" },
+  ];
+
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <input
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-        required
-        placeholder="Your Name"
-        className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.08] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 transition-colors text-sm"
-      />
-      <input
-        name="email"
-        type="email"
-        value={form.email}
-        onChange={handleChange}
-        required
-        placeholder="Your Email"
-        className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.08] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 transition-colors text-sm"
-      />
-      <textarea
-        name="message"
-        value={form.message}
-        onChange={handleChange}
-        required
-        rows={4}
-        placeholder="Your Message"
-        className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.08] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 transition-colors text-sm resize-none"
-      />
-      <button
-        type="submit"
-        disabled={status === "sending" || status === "sent"}
-        className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all disabled:opacity-60"
-        style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
-      >
-        {status === "sending" ? (
-          <span className="animate-pulse">Sending...</span>
-        ) : status === "sent" ? (
-          <span>✅ Message Sent!</span>
-        ) : status === "error" ? (
-          <span>❌ Failed — try email directly</span>
-        ) : (
-          <><Send className="w-4 h-4" /> Say Hello 👋</>
-        )}
-      </button>
-    </form>
+    <div className="w-full">
+      {/* Say Hello trigger button */}
+      {!open && (
+        <motion.button
+          onClick={() => setOpen(true)}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.97 }}
+          className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-white relative overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
+        >
+          <div className="absolute inset-0 bg-white/15 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Mail className="w-5 h-5 relative" />
+          <span className="relative">Say Hello 👋</span>
+        </motion.button>
+      )}
+
+      {/* Animated form fields */}
+      {open && (
+        <form ref={formRef} onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
+          {fields.map((f, i) => (
+            <motion.div
+              key={f.name}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20, delay: i * 0.08 }}
+            >
+              <input
+                name={f.name}
+                type={f.type}
+                value={form[f.name]}
+                onChange={handleChange}
+                required
+                placeholder={f.placeholder}
+                className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/60 transition-colors text-sm"
+              />
+            </motion.div>
+          ))}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.16 }}
+          >
+            <textarea
+              name="message"
+              value={form.message}
+              onChange={handleChange}
+              required
+              rows={4}
+              placeholder="Your Message"
+              className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/60 transition-colors text-sm resize-none"
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.24 }}
+            className="flex gap-3"
+          >
+            <button
+              type="submit"
+              disabled={status === "sending" || status === "sent"}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all disabled:opacity-60"
+              style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
+            >
+              {status === "sending" ? (
+                <span className="animate-pulse">Sending...</span>
+              ) : status === "sent" ? (
+                <span>✅ Sent!</span>
+              ) : status === "error" ? (
+                <span>❌ Failed</span>
+              ) : (
+                <><Send className="w-4 h-4" /> Send Message</>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setOpen(false); setStatus("idle"); setForm({ name: "", email: "", message: "" }); }}
+              className="px-4 py-3 rounded-xl text-gray-500 border border-white/10 hover:border-white/20 hover:text-gray-300 text-sm transition-all"
+            >
+              Cancel
+            </button>
+          </motion.div>
+        </form>
+      )}
+    </div>
   );
 }
 
@@ -939,7 +987,8 @@ export default function Home() {
 
         {/* ── CONTACT ── */}
         <section id="contact" className="scroll-mt-24">
-          <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-8 md:p-12"
+          <div
+            className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-8 md:p-12"
             style={{ boxShadow: "0 0 80px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.05)" }}
           >
             {/* Decorative blobs */}
@@ -951,54 +1000,49 @@ export default function Home() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
-              className="relative z-10"
+              className="relative z-10 flex flex-col items-center text-center gap-6"
             >
-              <div className="text-center mb-10">
-                <div className="text-5xl mb-4">✨</div>
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+              <div className="text-5xl">✨</div>
+              <div>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-3">
                   Let&apos;s Build Something{" "}
                   <span className="gradient-text">Amazing</span>
                 </h2>
-                <p className="text-gray-500 text-lg max-w-lg mx-auto">
-                  I&apos;m always open to exciting projects, collaborations, and new opportunities.
-                  Drop me a message — I&apos;d love to hear from you!
+                <p className="text-gray-500 text-base max-w-md mx-auto">
+                  Open to projects, collaborations &amp; opportunities. Drop me a message!
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                {/* Contact Form */}
+              {/* Say Hello form — expands inline */}
+              <div className="w-full max-w-md">
                 <ContactForm />
+              </div>
 
-                {/* Social links */}
-                <div className="flex flex-col justify-center gap-4">
-                  <a
-                    href="mailto:devikasanthosh389@gmail.com"
-                    className="group inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold text-white relative overflow-hidden"
-                    style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
-                  >
-                    <div className="absolute inset-0 bg-white/15 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Mail className="w-5 h-5 relative" />
-                    <span className="relative">devikasanthosh389@gmail.com</span>
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/devika-santhosh-7b73472b2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
-                  >
-                    <LinkedinIcon className="w-5 h-5" />
-                    Connect on LinkedIn
-                  </a>
-                  <a
-                    href="https://github.com/Dcod36"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
-                  >
-                    <GithubIcon className="w-5 h-5" />
-                    github.com/Dcod36
-                  </a>
-                </div>
+              {/* Divider */}
+              <div className="flex items-center gap-4 w-full max-w-md">
+                <div className="flex-1 h-px bg-white/[0.06]" />
+                <span className="text-gray-700 text-xs uppercase tracking-widest">or connect via</span>
+                <div className="flex-1 h-px bg-white/[0.06]" />
+              </div>
+
+              {/* Social row */}
+              <div className="flex flex-wrap justify-center gap-3">
+                <a
+                  href="https://linkedin.com/in/devika-santhosh-7b73472b2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm border border-white/10 text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
+                >
+                  <LinkedinIcon className="w-4 h-4" /> LinkedIn
+                </a>
+                <a
+                  href="https://github.com/Dcod36"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm border border-white/10 text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
+                >
+                  <GithubIcon className="w-4 h-4" /> GitHub
+                </a>
               </div>
             </motion.div>
           </div>
