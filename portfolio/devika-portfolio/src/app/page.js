@@ -600,7 +600,7 @@ export default function Home() {
                   AI-powered accessibility tools. My work blends deep learning, optimization, and thoughtful UX.
                 </p>
                 <p>
-                  I actively compete in hackathons, winning 1st at TinkerHack and placing 3rd at HackEuropa (European stage).
+                  I actively compete in hackathons, winning 1st at TinkerHack and placing 3rd at HackEuropa — held at SOE, CUSAT.
                 </p>
                 <p className="text-purple-300 font-medium italic border-l-2 border-purple-500 pl-4">
                   &ldquo;Always building, always learning—looking for opportunities to create meaningful impact.&rdquo;
@@ -640,10 +640,10 @@ export default function Home() {
             {[
               {
                 emoji: "🥉",
-                title: "HackEuropa",
+                title: "HackEuropa — SOE CUSAT",
                 badge: "3rd Prize",
                 badgeColor: "text-yellow-400",
-                desc: "Built an inclusive learning platform for accessibility — competing at a European-level hackathon.",
+                desc: "Built an inclusive learning platform for accessibility — competing at HackEuropa held at SOE, CUSAT.",
                 delay: 0.1,
               },
               {
@@ -742,7 +742,7 @@ export default function Home() {
             />
             <ProjectCard
               title="Inclusive Learning Assistant"
-              subtitle="HackEuropa 3rd Prize · Accessibility Platform"
+              subtitle="HackEuropa (SOE CUSAT) 3rd Prize · Accessibility Platform"
               bullets={[
                 "AI Reading Coach & Text-to-Figure visual explainer via Gemini",
                 "Smart Voice Notes & Focus Line reading with Web Speech API",
