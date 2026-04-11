@@ -703,7 +703,7 @@ export default function Home() {
                 {/* Image */}
                 <div className="relative w-64 h-64 md:w-[360px] md:h-[360px] rounded-full overflow-hidden bg-gray-900 border-4 border-[#030014]">
                   <img
-                    src="/portfolio.jpg"
+                    src="/profile.jpg"
                     alt="Devika Santhosh"
                     className="w-full h-full object-cover"
                     onError={(e) => {
