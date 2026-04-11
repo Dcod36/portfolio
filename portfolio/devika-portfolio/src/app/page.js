@@ -578,16 +578,7 @@ export default function Home() {
                     }}
                   />
                 </div>
-                {/* Floating badge */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.2, type: "spring", stiffness: 200 }}
-                  className="absolute -bottom-4 -right-4 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl px-4 py-2 shadow-2xl"
-                >
-                  <div className="text-white font-bold text-sm">🏆 Award Winner</div>
-                  <div className="text-purple-200 text-xs">HackEuropa · TinkerHack</div>
-                </motion.div>
+
               </div>
             </motion.div>
           </div>
