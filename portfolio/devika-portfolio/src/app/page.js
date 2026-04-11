@@ -386,10 +386,10 @@ function ContactForm() {
     setStatus("sending");
     try {
       await emailjs.sendForm(
-        "service_portfolio",   // ← replace with your EmailJS Service ID
-        "template_portfolio",  // ← replace with your EmailJS Template ID
+        "service_ogaxwkz",
+        "template_efsuqxq",
         formRef.current,
-        "YOUR_PUBLIC_KEY"      // ← replace with your EmailJS Public Key
+        "ekLPAow9BGnt3sEzv"
       );
       setStatus("sent");
       setForm({ name: "", email: "", message: "" });
