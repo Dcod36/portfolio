@@ -576,7 +576,7 @@ export default function Home() {
             </a>
             <div className="w-px h-4 bg-white/10" />
             <a
-              href="https://drive.google.com/drive/folders/145KZ81bNQWQ-8vc5noKMa4RlfuP1_rDM?usp=drive_link"
+              href="/Devika_Santhosh_resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs font-semibold px-3 py-1 rounded-full border border-purple-500/40 text-purple-400 hover:bg-purple-500/10 hover:border-purple-400 transition-all tracking-wide"
@@ -658,7 +658,7 @@ export default function Home() {
                   Get In Touch
                 </a>
                 <a
-                  href="https://drive.google.com/drive/folders/145KZ81bNQWQ-8vc5noKMa4RlfuP1_rDM?usp=drive_link"
+                  href="/Devika_Santhosh_resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm border border-purple-500/30 text-purple-300 hover:text-white hover:border-purple-400 hover:bg-purple-500/10 transition-all"
