@@ -440,6 +440,15 @@ export default function Home() {
             <a href="mailto:devikasanthosh389@gmail.com" className="text-gray-400 hover:text-purple-400 transition-colors">
               <Mail className="w-4 h-4" />
             </a>
+            <div className="w-px h-4 bg-white/10" />
+            <a
+              href="https://drive.google.com/drive/folders/145KZ81bNQWQ-8vc5noKMa4RlfuP1_rDM?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold px-3 py-1 rounded-full border border-purple-500/40 text-purple-400 hover:bg-purple-500/10 hover:border-purple-400 transition-all tracking-wide"
+            >
+              Resume
+            </a>
           </div>
         </motion.div>
       </nav>
@@ -513,6 +522,15 @@ export default function Home() {
                   className="px-8 py-3.5 rounded-full font-semibold text-sm border border-white/10 text-gray-300 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all"
                 >
                   Get In Touch
+                </a>
+                <a
+                  href="https://drive.google.com/drive/folders/145KZ81bNQWQ-8vc5noKMa4RlfuP1_rDM?usp=drive_link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm border border-purple-500/30 text-purple-300 hover:text-white hover:border-purple-400 hover:bg-purple-500/10 transition-all"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  View Resume
                 </a>
               </motion.div>
 
