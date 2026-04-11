@@ -1,7 +1,8 @@
 "use client";
 import { motion, useScroll, useSpring, useMotionValue, useTransform } from "framer-motion";
-import { Award, Briefcase, GraduationCap, Code, Rocket, BrainCircuit, ExternalLink, Mail, ChevronDown, Sparkles } from "lucide-react";
+import { Award, Briefcase, GraduationCap, Code, Rocket, BrainCircuit, ExternalLink, Mail, ChevronDown, Sparkles, Send } from "lucide-react";
 import { useEffect, useState, useRef, useCallback } from "react";
+import emailjs from "@emailjs/browser";
 
 // ───────────────────────────────────────────
 // SVG Icons
@@ -299,14 +300,14 @@ const ProjectCard = ({ title, subtitle, bullets, tags, tagColor, accent, delay, 
   };
   const c = colorMap[tagColor] || colorMap.purple;
 
-  return (
+  const card = (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
       viewport={{ once: true, margin: "-40px" }}
       whileHover={{ y: -8, scale: 1.02 }}
-      className="shimmer-card group relative bg-white/[0.04] border border-white/[0.08] backdrop-blur-xl rounded-2xl p-6 md:p-8 hover:bg-white/[0.07] transition-all duration-400 cursor-pointer overflow-hidden"
+      className="shimmer-card group relative bg-white/[0.04] border border-white/[0.08] backdrop-blur-xl rounded-2xl p-6 md:p-8 hover:bg-white/[0.07] transition-all duration-400 cursor-pointer overflow-hidden h-full"
       style={{ boxShadow: `0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)` }}
     >
       {/* Glow on hover */}
@@ -343,6 +344,15 @@ const ProjectCard = ({ title, subtitle, bullets, tags, tagColor, accent, delay, 
       </div>
     </motion.div>
   );
+
+  if (link) {
+    return (
+      <a href={link} target="_blank" rel="noopener noreferrer" className="block">
+        {card}
+      </a>
+    );
+  }
+  return card;
 };
 
 // ───────────────────────────────────────────
@@ -360,6 +370,82 @@ const StatBadge = ({ value, label, delay }) => (
     <div className="text-gray-500 text-xs uppercase tracking-widest">{label}</div>
   </motion.div>
 );
+
+// ───────────────────────────────────────────
+// Contact Form (EmailJS)
+// ───────────────────────────────────────────
+function ContactForm() {
+  const formRef = useRef(null);
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      await emailjs.sendForm(
+        "service_portfolio",   // ← replace with your EmailJS Service ID
+        "template_portfolio",  // ← replace with your EmailJS Template ID
+        formRef.current,
+        "YOUR_PUBLIC_KEY"      // ← replace with your EmailJS Public Key
+      );
+      setStatus("sent");
+      setForm({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
+  };
+
+  return (
+    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <input
+        name="name"
+        value={form.name}
+        onChange={handleChange}
+        required
+        placeholder="Your Name"
+        className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.08] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 transition-colors text-sm"
+      />
+      <input
+        name="email"
+        type="email"
+        value={form.email}
+        onChange={handleChange}
+        required
+        placeholder="Your Email"
+        className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.08] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 transition-colors text-sm"
+      />
+      <textarea
+        name="message"
+        value={form.message}
+        onChange={handleChange}
+        required
+        rows={4}
+        placeholder="Your Message"
+        className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.08] text-white placeholder-gray-600 focus:outline-none focus:border-purple-500/50 transition-colors text-sm resize-none"
+      />
+      <button
+        type="submit"
+        disabled={status === "sending" || status === "sent"}
+        className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all disabled:opacity-60"
+        style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
+      >
+        {status === "sending" ? (
+          <span className="animate-pulse">Sending...</span>
+        ) : status === "sent" ? (
+          <span>✅ Message Sent!</span>
+        ) : status === "error" ? (
+          <span>❌ Failed — try email directly</span>
+        ) : (
+          <><Send className="w-4 h-4" /> Say Hello 👋</>
+        )}
+      </button>
+    </form>
+  );
+}
 
 // ───────────────────────────────────────────
 // Main Page
@@ -748,6 +834,7 @@ export default function Home() {
               tags={["DeepFace", "Twilio", "Gemini AI", "Computer Vision"]}
               tagColor="pink"
               delay={0.1}
+              link="https://github.com/Dcod36/tinker-hack"
             />
             <ProjectCard
               title="Inclusive Learning Assistant"
@@ -761,6 +848,7 @@ export default function Home() {
               tags={["Gemini AI", "MediaPipe", "Web Speech API", "scikit-learn"]}
               tagColor="blue"
               delay={0.2}
+              link="https://github.com/Dcod36/Hack_signlanguage"
             />
             <ProjectCard
               title="TraffiQ – AI Traffic Optimization"
@@ -773,6 +861,7 @@ export default function Home() {
               tags={["YOLO", "OpenCV", "Computer Vision", "Python"]}
               tagColor="purple"
               delay={0.3}
+              link="https://github.com/Dcod36/traffic--management"
             />
             <ProjectCard
               title="Smart Finance & Budget Tracker"
@@ -785,6 +874,7 @@ export default function Home() {
               tags={["Flutter", "Firebase", "Dart", "Analytics"]}
               tagColor="green"
               delay={0.4}
+              link="https://github.com/Dcod36/expense-tracker"
             />
           </div>
         </section>
@@ -849,7 +939,7 @@ export default function Home() {
 
         {/* ── CONTACT ── */}
         <section id="contact" className="scroll-mt-24">
-          <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-12 text-center"
+          <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-8 md:p-12"
             style={{ boxShadow: "0 0 80px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.05)" }}
           >
             {/* Decorative blobs */}
@@ -863,34 +953,52 @@ export default function Home() {
               viewport={{ once: true }}
               className="relative z-10"
             >
-              <div className="text-5xl mb-4">✨</div>
-              <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-                Let&apos;s Build Something{" "}
-                <span className="gradient-text">Amazing</span>
-              </h2>
-              <p className="text-gray-500 text-lg mb-8 max-w-lg mx-auto">
-                I&apos;m always open to exciting projects, collaborations, and new opportunities.
-                Drop me a message — I&apos;d love to hear from you!
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a
-                  href="mailto:devikasanthosh389@gmail.com"
-                  className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-white relative overflow-hidden"
-                  style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
-                >
-                  <div className="absolute inset-0 bg-white/15 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <Mail className="w-5 h-5 relative" />
-                  <span className="relative">Say Hello 👋</span>
-                </a>
-                <a
-                  href="https://linkedin.com/in/devika-santhosh-7b73472b2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold border border-white/10 text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
-                >
-                  <LinkedinIcon className="w-5 h-5" />
-                  Connect on LinkedIn
-                </a>
+              <div className="text-center mb-10">
+                <div className="text-5xl mb-4">✨</div>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
+                  Let&apos;s Build Something{" "}
+                  <span className="gradient-text">Amazing</span>
+                </h2>
+                <p className="text-gray-500 text-lg max-w-lg mx-auto">
+                  I&apos;m always open to exciting projects, collaborations, and new opportunities.
+                  Drop me a message — I&apos;d love to hear from you!
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                {/* Contact Form */}
+                <ContactForm />
+
+                {/* Social links */}
+                <div className="flex flex-col justify-center gap-4">
+                  <a
+                    href="mailto:devikasanthosh389@gmail.com"
+                    className="group inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold text-white relative overflow-hidden"
+                    style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
+                  >
+                    <div className="absolute inset-0 bg-white/15 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Mail className="w-5 h-5 relative" />
+                    <span className="relative">devikasanthosh389@gmail.com</span>
+                  </a>
+                  <a
+                    href="https://linkedin.com/in/devika-santhosh-7b73472b2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
+                  >
+                    <LinkedinIcon className="w-5 h-5" />
+                    Connect on LinkedIn
+                  </a>
+                  <a
+                    href="https://github.com/Dcod36"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold border border-white/10 text-gray-300 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
+                  >
+                    <GithubIcon className="w-5 h-5" />
+                    github.com/Dcod36
+                  </a>
+                </div>
               </div>
             </motion.div>
           </div>
